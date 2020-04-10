@@ -1,5 +1,7 @@
 package es.upm.dit.adsw.practica1;
 
+
+import java.util.List;
 /**
  * @author junacarlosduenaslopez
  * @author mmiguel
@@ -11,6 +13,7 @@ public class Vehiculo {
 	private double t0;
 	private Vector pos;
 	private double t;
+	private DetectorVehiculos detector;
 	
 	private static final double MINIMAL_DISTANCE = 2;
 	private static final double SAFETY_DISTANCE = 20;
@@ -29,6 +32,7 @@ public class Vehiculo {
 		this.t0 = t0;
 		this.pos = pos;
 		this.t = t;
+		this.detector = null;
 	}
 	
 	/**
@@ -94,6 +98,23 @@ public class Vehiculo {
 	public void setT(double t) {
 		this.t = t;
 	}
+	
+	/**
+	 * Devuelve el detector de vehiculos asociado al vehiculo
+	 * @return el detector de vehiculos asociado
+	 */
+	public DetectorVehiculos getDetector() {
+		return detector;
+	}
+	
+	/**
+	 * Actualiza el detector de vehiculos del vehiculo
+	 * @param unDetector el nuevo detector
+	 */
+	public void setDetector(DetectorVehiculos unDetector) {
+		this.detector = unDetector;
+	}
+	
 	
 	@Override
 	public String toString() {
@@ -165,6 +186,9 @@ public class Vehiculo {
 		this.t0 = this.t;
 		this.pos = pos;
 		this.t = t;
+		if (getDetector() != null) {
+			List<Vehiculo> vehiculosAvisados = this.detector.vehiculoSeMueve(t);
+		}
 	}
 
 
@@ -259,4 +283,24 @@ public class Vehiculo {
 	public void setT0(double t2) {
 		t0=t2;
 	}
+	
+	/**
+	 * Updated method for mover
+	 * @param t
+	 */
+	
+	public void actualizaMover(double t) {
+		if (t == this.t)
+			return;
+		Vector pos = new Vector (this.pos.getX() + this.getVelocidad().getX()* (t - this.t),
+				this.pos.getY() + this.getVelocidad().getY()* (t - this.t));
+		if (this.t == t && this.pos.equals(pos))
+			return;
+		this.pos0 = this.pos;
+		this.t0 = this.t;
+		this.pos = pos;
+		this.t = t;
+	}
+	
+	
 }

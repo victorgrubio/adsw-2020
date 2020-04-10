@@ -2,6 +2,7 @@ package es.upm.dit.adsw.practica1;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Collections;
 
 /**
  * @author juancarlosduenaslopez
@@ -22,6 +23,7 @@ public class DetectorVehiculos {
 		this.v = v;
 		this.detectados = new ArrayList<Vehiculo> (); 
 		this.n = 0;
+		this.v.setDetector(this);
 	}
 
 	/**
@@ -120,5 +122,38 @@ public class DetectorVehiculos {
 					return Orden.Despues;
 			else
 				return Orden.Despues;
+	}
+	
+	private List<Vehiculo> sortByPeligrosidad(List<Vehiculo> vehiculos){
+		for (int index = 0; index < vehiculos.size(); index ++) {
+			Vehiculo current = vehiculos.get(index);
+			while (index > 0 && impactoRelativoAEsteVehiculo(current, vehiculos.get(index-1)) == Orden.Despues) {
+				vehiculos.set(index, vehiculos.get(index-1));
+				index -= 1;
+			}
+			vehiculos.set(index, current);
+		}
+		return vehiculos;
+	}
+	
+	
+	public List<Vehiculo> vehiculoSeMueve(double t){
+		SelectorVehiculoTrue s = new SelectorVehiculoTrue();
+		List<Vehiculo> vehiculosDetectados = this.getVehiculos(s);
+		List<Vehiculo> copyVehiculosDetectados = new ArrayList<Vehiculo>(vehiculosDetectados.size());
+		Collections.copy(copyVehiculosDetectados, vehiculosDetectados);
+		for (Vehiculo vehiculo: copyVehiculosDetectados) {
+			vehiculo.actualizaMover(t);
+		}
+		List<Vehiculo> sortedCopyVehiculosDetectados = this.sortByPeligrosidad(copyVehiculosDetectados);
+		for (Vehiculo vehiculo: sortedCopyVehiculosDetectados) {
+			DetectorVehiculos searchedDetector = vehiculo.getDetector();
+			if(searchedDetector.buscaVehiculo(this.v) != null) {
+				searchedDetector.addDeteccion(this.v.getPos(), t);
+			}else{
+				searchedDetector.addVehiculo(this.v);
+			}
+		}
+		return sortedCopyVehiculosDetectados;
 	}
 }
