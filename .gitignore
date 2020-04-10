@@ -1,0 +1,12 @@
+*.pdf
+
+# Eclipse settings
+.settings
+.project
+.classpath
+
+# VScode settings
+.vscode
+
+# Idea 
+.idea
