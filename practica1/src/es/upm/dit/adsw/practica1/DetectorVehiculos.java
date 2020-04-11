@@ -140,8 +140,7 @@ public class DetectorVehiculos {
 	public List<Vehiculo> vehiculoSeMueve(double t){
 		SelectorVehiculoTrue s = new SelectorVehiculoTrue();
 		List<Vehiculo> vehiculosDetectados = this.getVehiculos(s);
-		List<Vehiculo> copyVehiculosDetectados = new ArrayList<Vehiculo>(vehiculosDetectados.size());
-		Collections.copy(copyVehiculosDetectados, vehiculosDetectados);
+		List<Vehiculo> copyVehiculosDetectados = new ArrayList<Vehiculo>(vehiculosDetectados);
 		for (Vehiculo vehiculo: copyVehiculosDetectados) {
 			vehiculo.actualizaMover(t);
 		}

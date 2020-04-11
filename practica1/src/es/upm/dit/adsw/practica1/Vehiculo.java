@@ -288,7 +288,6 @@ public class Vehiculo {
 	 * Updated method for mover
 	 * @param t
 	 */
-	
 	public void actualizaMover(double t) {
 		if (t == this.t)
 			return;
